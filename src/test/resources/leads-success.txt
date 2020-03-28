@@ -1,0 +1,42 @@
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":1098073,"nome":"João PAIVA","cargo":"Auxiliar de marceneiro"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"João RANGEL ","cargo":"Analista de planejamento financeiro"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Luiz AMADEU","cargo":"Analista de BI (Business Intelligence)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio MOTTA","cargo":"Assistente de engenharia (construção civil)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otto ROCHA","cargo":"Colhedor de uva"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":389759,"nome":"Fernando ROCHA","cargo":"Construtor civil"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Tales JOHNSON","cargo":"Colhedor de banana"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Miguel MORAES","cargo":"Alinhador de rodas"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Felipe TORRES","cargo":"Carpinteiro (obras)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Plínio ANTUNES","cargo":"Condutor de veículo de carga"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Julio MOURA","cargo":"Asfaltador na conservação de vias permanentes (exceto trilhos)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio RANGEL ","cargo":"Atendente de buffet"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":1714136,"nome":"Fernando C NDIDO","cargo":"Armador de estrutura de concreto armado"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Bernardo ALMEIDA","cargo":"Ajudante de farmácia"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Eduardo SILVINO","cargo":"Armador de estrutura de concreto"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Bernardo FERRARI","cargo":"Atendente de bar"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"André GONÇALVES","cargo":"Auxiliar de conservação de barragens"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"DELETE","data":{"id":1608496}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Vinícios QUEIROZ","cargo":"Cozinheiro de restaurante"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":5434,"nome":"Fabrício QUEIROZ","cargo":"Atendente de buffet"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Eduardo MOURA","cargo":"Encarregado de telemarketing"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"João WEBER","cargo":"Auxiliar de garçom"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Arthur MOURA","cargo":"Assistente de serviço de contabilidade"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"DELETE","data":{"id":1003158}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Heitor AZEVEDO","cargo":"Operador de negócios"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":1325570,"nome":"George CARVALHO","cargo":"Trabalhador polivalente da confecção de calçados"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Gabriel SILVINO","cargo":"Zelador"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio OTTO","cargo":"Açougueiro classificador (exclusive comércio)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"DELETE","data":{"id":853799}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Danilo FERRARI","cargo":"Analista de logística (técnico de nível médio)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Rodrigo GONÇALVES","cargo":"Arrumadeira de hotel"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio AZEVEDO","cargo":"Atendente de buffet"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Vinícios GOMES","cargo":"Guest relations"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"George SANTOS","cargo":"Arrematador"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otto ANTUNES","cargo":"Injetor de plástico"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Vinícios COUTINHO","cargo":"Ajudante de churrasqueiro"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":880567,"nome":"Heitor PINHEIRO","cargo":"Atendente de clínica médica"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Felipe SANTOS","cargo":"Operador de teleatendimento ativo (telemarketing)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Éder BARROS","cargo":"Conferente de carga e descarga"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Felipe ROCHA","cargo":"Açougueiro cortador (exclusive comércio)"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":294702,"nome":"Miguel CABRAL","cargo":"Assessor de diretoria"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Eduardo LEVY","cargo":"Injetor de plástico"}}
