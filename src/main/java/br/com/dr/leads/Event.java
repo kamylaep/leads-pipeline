@@ -24,11 +24,11 @@ public class Event implements Serializable {
     EventType eventType = EventType.valueOf(getType());
 
     if (EventType.CREATE == eventType) {
-      return !StringUtils.isAnyBlank(data.getNome(), data.getCargo());
+      return !StringUtils.isAnyBlank(data.getName(), data.getRole());
     }
 
     if (EventType.UPDATE == eventType) {
-      return Objects.nonNull(data.getId()) && !StringUtils.isAnyBlank(data.getNome(), data.getCargo());
+      return Objects.nonNull(data.getId()) && !StringUtils.isAnyBlank(data.getName(), data.getRole());
     }
 
     if (EventType.DELETE == eventType) {
