@@ -2,9 +2,8 @@ package br.com.dr.leads.pipeline;
 
 import org.apache.beam.sdk.extensions.gcp.options.GcpOptions;
 import org.apache.beam.sdk.options.Default;
-import org.apache.beam.sdk.options.PipelineOptions;
 
-public interface LeadsPipelineOptions extends GcpOptions, PipelineOptions {
+public interface LeadsPipelineOptions extends GcpOptions {
 
   String getSubscription();
 
