@@ -1,5 +1,7 @@
 package br.com.dr.leads.pipeline;
 
+import static br.com.dr.leads.pipeline.LeadsPipeline.ERROR_TAG;
+import static br.com.dr.leads.pipeline.LeadsPipeline.SUCCESS_TAG;
 import static br.com.dr.leads.test.FileHelper.readFileToStream;
 
 import java.io.File;
@@ -13,21 +15,14 @@ import org.apache.beam.sdk.testing.TestPipeline;
 import org.apache.beam.sdk.transforms.Create;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.values.PCollectionTuple;
-import org.apache.beam.sdk.values.TupleTag;
 import org.apache.beam.sdk.values.TupleTagList;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 
-import br.com.dr.leads.Event;
-
 public class ValidateEventsTest {
 
-  private static TupleTag<Event> successTag = new TupleTag<Event>() {
-  };
-  private static TupleTag<String> errorTag = new TupleTag<String>() {
-  };
 
   private List<String> expectedError = readFileToStream(Paths.get("src/test/resources/leads-error.txt")).collect(Collectors.toList());
 
@@ -43,10 +38,10 @@ public class ValidateEventsTest {
   public void shouldProduceAFileWithInvalidDataAndAFileWithValidData() {
     PCollectionTuple output = testPipeline
         .apply(Create.of(expectedError))
-        .apply(ParDo.of(new LeadsPipeline.ValidateEvent(errorTag)).withOutputTags(successTag, TupleTagList.of(errorTag)));
+        .apply(ParDo.of(new LeadsPipeline.ValidateEvent()).withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)));
 
-    PAssert.that(output.get(successTag)).empty();
-    PAssert.that(output.get(errorTag)).containsInAnyOrder(expectedError);
+    PAssert.that(output.get(SUCCESS_TAG)).empty();
+    PAssert.that(output.get(ERROR_TAG)).containsInAnyOrder(expectedError);
     testPipeline.run().waitUntilFinish();
   }
 

@@ -15,10 +15,10 @@ import org.junit.Rule
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class ValidateEventSpecTest extends Specification implements Serializable {
+import static br.com.dr.leads.pipeline.LeadsPipeline.ERROR_TAG
+import static br.com.dr.leads.pipeline.LeadsPipeline.SUCCESS_TAG
 
-  def successTag = new TupleTag<Event>() {}
-  def errorTag = new TupleTag<String>() {}
+class ValidateEventSpecTest extends Specification implements Serializable {
 
   @Rule
   public final transient TestPipeline testPipeline = TestPipeline.fromOptions(createOptions())
@@ -32,12 +32,12 @@ class ValidateEventSpecTest extends Specification implements Serializable {
     setup:
     def output = testPipeline
         .apply(Create.of(event))
-        .apply(ParDo.of(new LeadsPipeline.ValidateEvent(errorTag))
-            .withOutputTags(successTag, TupleTagList.of(errorTag)))
+        .apply(ParDo.of(new LeadsPipeline.ValidateEvent())
+            .withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)))
 
     expect:
-    PAssert.that(output.get(errorTag)).containsInAnyOrder(event)
-    PAssert.that(output.get(successTag)).empty()
+    PAssert.that(output.get(ERROR_TAG)).containsInAnyOrder(event)
+    PAssert.that(output.get(SUCCESS_TAG)).empty()
     testPipeline.run().waitUntilFinish()
 
     where:

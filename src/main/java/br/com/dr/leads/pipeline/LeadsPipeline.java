@@ -28,6 +28,11 @@ import lombok.AllArgsConstructor;
 
 public class LeadsPipeline {
 
+  public static final TupleTag<Event> SUCCESS_TAG = new TupleTag<Event>() {
+  };
+  public static final TupleTag<String> ERROR_TAG = new TupleTag<String>() {
+  };
+
   public static void main(String[] args) {
     PipelineOptionsFactory.register(LeadsPipelineOptions.class);
     LeadsPipelineOptions options = PipelineOptionsFactory.fromArgs(args).create().as(LeadsPipelineOptions.class);
@@ -50,17 +55,12 @@ public class LeadsPipeline {
 
     @Override
     public PDone expand(PCollection<String> input) {
-      TupleTag<Event> successTag = new TupleTag<Event>() {
-      };
-      TupleTag<String> errorTag = new TupleTag<String>() {
-      };
-
       PCollectionTuple pCollectionTuple = input
           .apply("Window", Window.into(FixedWindows.of(Duration.standardSeconds(windowInSeconds))))
-          .apply("ValidateEvent", ParDo.of(new ValidateEvent(errorTag)).withOutputTags(successTag, TupleTagList.of(errorTag)));
+          .apply("ValidateEvent", ParDo.of(new ValidateEvent()).withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)));
 
       pCollectionTuple
-          .get(successTag)
+          .get(SUCCESS_TAG)
           .apply(MapElements.into(TypeDescriptors.strings()).via(e -> new Gson().toJson(e)))
           .apply("WriteSuccess",
               FileIO.<String>write()
@@ -70,7 +70,7 @@ public class LeadsPipeline {
                   .to(outputPath + "/success/"));
 
       pCollectionTuple
-          .get(errorTag)
+          .get(ERROR_TAG)
           .apply("WriteError",
               FileIO.<String>write()
                   .withNumShards(shardsNum)
@@ -82,10 +82,7 @@ public class LeadsPipeline {
     }
   }
 
-  @AllArgsConstructor
   public static class ValidateEvent extends DoFn<String, Event> {
-
-    private TupleTag<String> errorTag;
 
     @ProcessElement
     public void processElement(ProcessContext context) {
@@ -95,12 +92,12 @@ public class LeadsPipeline {
         Event event = gson.fromJson(json, Event.class);
 
         if (event.isValid()) {
-          context.output(event);
+          context.output(SUCCESS_TAG, event);
         } else {
-          context.output(errorTag, json);
+          context.output(ERROR_TAG, json);
         }
       } catch (Exception e) {
-        context.output(errorTag, json);
+        context.output(ERROR_TAG, json);
       }
     }
   }
