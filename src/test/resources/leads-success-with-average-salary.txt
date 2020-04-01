@@ -1,0 +1,44 @@
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":1098073,"nome":"João PAIVA","cargo":"Auxiliar de marceneiro","salarioMedio":1612.29}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"João RANGEL ","cargo":"Analista de planejamento financeiro","salarioMedio":3925.14}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Luiz AMADEU","cargo":"Analista de BI (Business Intelligence)","salarioMedio":4809.05}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio MOTTA","cargo":"Assistente de engenharia (construção civil)","salarioMedio":2777.35}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otto ROCHA","cargo":"Colhedor de uva","salarioMedio":1055.83}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":389759,"nome":"Fernando ROCHA","cargo":"Construtor civil","salarioMedio":3061.76}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Tales JOHNSON","cargo":"Colhedor de banana","salarioMedio":1188.58}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Miguel MORAES","cargo":"Alinhador de rodas","salarioMedio":1602.33}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Felipe TORRES","cargo":"Carpinteiro (obras)","salarioMedio":1772.24}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Plínio ANTUNES","cargo":"Condutor de veículo de carga","salarioMedio":1681.53}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Julio MOURA","cargo":"Asfaltador na conservação de vias permanentes (exceto trilhos)","salarioMedio":1233.19}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio RANGEL ","cargo":"Atendente de buffet","salarioMedio":1289.13}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":1714136,"nome":"Fernando C NDIDO","cargo":"Armador de estrutura de concreto armado","salarioMedio":1716.56}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Bernardo ALMEIDA","cargo":"Ajudante de farmácia","salarioMedio":1377.5}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Eduardo SILVINO","cargo":"Armador de estrutura de concreto","salarioMedio":1731.84}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Bernardo FERRARI","cargo":"Atendente de bar","salarioMedio":1321.65}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"André GONÇALVES","cargo":"Auxiliar de conservação de barragens","salarioMedio":1358.28}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"DELETE","data":{"id":1608496}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Vinícios QUEIROZ","cargo":"Cozinheiro de restaurante","salarioMedio":1353.18}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":5434,"nome":"Fabrício QUEIROZ","cargo":"Atendente de buffet","salarioMedio":1289.13}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Eduardo MOURA","cargo":"Encarregado de telemarketing","salarioMedio":2680.19}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"João WEBER","cargo":"Auxiliar de garçom","salarioMedio":1250.82}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Arthur MOURA","cargo":"Assistente de serviço de contabilidade","salarioMedio":1855.54}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"DELETE","data":{"id":1003158}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Heitor AZEVEDO","cargo":"Operador de negócios","salarioMedio":1664.47}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":1325570,"nome":"George CARVALHO","cargo":"Trabalhador polivalente da confecção de calçados","salarioMedio":1267.08}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Gabriel SILVINO","cargo":"Zelador","salarioMedio":1317.45}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio OTTO","cargo":"Açougueiro classificador (exclusive comércio)","salarioMedio":1375.49}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"DELETE","data":{"id":853799}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Danilo FERRARI","cargo":"Analista de logística (técnico de nível médio)","salarioMedio":1583.36}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Rodrigo GONÇALVES","cargo":"Arrumadeira de hotel","salarioMedio":1283.28}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otávio AZEVEDO","cargo":"Atendente de buffet","salarioMedio":1289.13}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Vinícios GOMES","cargo":"Guest relations","salarioMedio":1438.35}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"George SANTOS","cargo":"Arrematador","salarioMedio":3536.52}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Otto ANTUNES","cargo":"Injetor de plástico","salarioMedio":1558.45}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Vinícios COUTINHO","cargo":"Ajudante de churrasqueiro","salarioMedio":1259.95}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":880567,"nome":"Heitor PINHEIRO","cargo":"Atendente de clínica médica","salarioMedio":1284.46}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Felipe SANTOS","cargo":"Operador de teleatendimento ativo (telemarketing)","salarioMedio":1146.23}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Éder BARROS","cargo":"Conferente de carga e descarga","salarioMedio":1582.55}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Felipe ROCHA","cargo":"Açougueiro cortador (exclusive comércio)","salarioMedio":1407.55}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":294702,"nome":"Miguel CABRAL","cargo":"Assessor de diretoria","salarioMedio":2416.26}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Eduardo LEVY","cargo":"Injetor de plástico","salarioMedio":1558.45}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Mônica LEVY","cargo":"Cargo sem salário médio"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":880567,"nome":"Heitor PINHEIRO","cargo":"Cargo sem salário médio"}}

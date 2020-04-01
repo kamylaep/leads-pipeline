@@ -6,13 +6,15 @@ import com.google.gson.annotations.SerializedName;
 
 import lombok.Value;
 
-@Value
+@Value(staticConstructor = "create")
 public class EventData implements Serializable {
 
   private Long id;
   @SerializedName("nome")
   private String name;
   @SerializedName("cargo")
-  private String role;
+  private String jobTitle;
+  @SerializedName("salarioMedio")
+  private Double averageSalary;
 
 }

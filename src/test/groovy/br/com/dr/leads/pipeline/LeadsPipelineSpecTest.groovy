@@ -1,15 +1,14 @@
 package br.com.dr.leads.pipeline
 
-import br.com.dr.leads.pipeline.LeadsPipeline
-import br.com.dr.leads.pipeline.LeadsPipelineOptions
+
 import groovy.io.FileType
+import org.apache.beam.sdk.coders.StringUtf8Coder
 import org.apache.beam.sdk.testing.TestPipeline
-import org.apache.beam.sdk.transforms.Create
+import org.apache.beam.sdk.testing.TestStream
 import org.apache.commons.io.FileUtils
 import org.junit.Rule
 import spock.lang.Shared
 import spock.lang.Specification
-import sun.security.provider.SHA
 
 class LeadsPipelineSpecTest extends Specification {
 
@@ -18,17 +17,17 @@ class LeadsPipelineSpecTest extends Specification {
   @Rule
   public transient TestPipeline testPipeline = TestPipeline.fromOptions(createOptions())
   @Shared
-  def expectedError
+  def inputError = new File('src/test/resources/leads-error.txt').readLines()
   @Shared
-  def expectedSuccess
+  def inputSuccess = new File('src/test/resources/leads-success.txt').readLines()
   @Shared
-  def expectedAllData
-
-  def setupSpec() {
-    expectedError = new File('src/test/resources/leads-error.txt').readLines()
-    expectedSuccess = new File('src/test/resources/leads-success.txt').readLines()
-    expectedAllData = expectedError + expectedSuccess
-  }
+  def inputAllData = inputError + inputSuccess
+  @Shared
+  def expectedSuccess = new File('src/test/resources/leads-success-with-average-salary.txt').readLines()
+  @Shared
+  def testInputStream = TestStream.create(StringUtf8Coder.of())
+      .addElements(inputAllData[0], *inputAllData.subList(1, inputAllData.size()))
+      .advanceWatermarkToInfinity()
 
   def cleanup() {
     FileUtils.deleteDirectory(new File(testPipeline.getOptions().output))
@@ -37,17 +36,17 @@ class LeadsPipelineSpecTest extends Specification {
   def 'should produce a file with invalid data and a file with valid data'() {
     given: 'a pipeline with valid and invalid data'
     testPipeline
-        .apply(Create.of(expectedAllData))
-        .apply(new LeadsPipeline.ProcessEvent(testPipeline.getOptions().getWindowInSeconds(),
-            testPipeline.getOptions().getShardsNum(), testPipeline.getOptions().getOutput()))
+        .apply(testInputStream)
+        .apply(new LeadsPipeline.ProcessEvent(testPipeline.getOptions().getWindowInSeconds(), testPipeline.getOptions().getShardsNum(),
+            testPipeline.getOptions().getOutput(), testPipeline.getOptions().getJobTitlesCsvPath()))
 
     when: 'the pipeline run'
     testPipeline.run().waitUntilFinish()
 
     then: 'should be created a file with invalid data'
     def actualErrorData = readOutputFiles('error/')
-    expectedError.size() == actualErrorData.size()
-    expectedError.containsAll(actualErrorData)
+    inputError.size() == actualErrorData.size()
+    inputError.containsAll(actualErrorData)
 
     and: 'should be created a file with valid data'
     def actualSuccessData = readOutputFiles('success/')
@@ -58,9 +57,9 @@ class LeadsPipelineSpecTest extends Specification {
   def 'should produce two shards for each type of file'() {
     given: 'a pipeline with valid and invalid data'
     testPipeline
-        .apply(Create.of(expectedAllData))
-        .apply(new LeadsPipeline.ProcessEvent(testPipeline.getOptions().getWindowInSeconds(),
-            testPipeline.getOptions().getShardsNum(), testPipeline.getOptions().getOutput()))
+        .apply(testInputStream)
+        .apply(new LeadsPipeline.ProcessEvent(testPipeline.getOptions().getWindowInSeconds(), testPipeline.getOptions().getShardsNum(),
+            testPipeline.getOptions().getOutput(), testPipeline.getOptions().getJobTitlesCsvPath()))
 
     when: 'the pipeline run'
     testPipeline.run().waitUntilFinish()
@@ -76,6 +75,7 @@ class LeadsPipelineSpecTest extends Specification {
     def pipelineOptions = TestPipeline.testingPipelineOptions().as(LeadsPipelineOptions.class)
     pipelineOptions.output = "/tmp/${UUID.randomUUID().toString()}"
     pipelineOptions.shardsNum = EXPECTED_SHARDS
+    pipelineOptions.jobTitlesCsvPath = 'src/test/resources/job-titles.csv'
     return pipelineOptions
   }
 

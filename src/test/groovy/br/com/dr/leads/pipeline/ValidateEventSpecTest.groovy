@@ -1,14 +1,12 @@
 package br.com.dr.leads.pipeline
 
-import br.com.dr.leads.Event
+
 import br.com.dr.leads.pipeline.LeadsPipeline
 import br.com.dr.leads.pipeline.LeadsPipelineOptions
-
 import org.apache.beam.sdk.testing.PAssert
 import org.apache.beam.sdk.testing.TestPipeline
 import org.apache.beam.sdk.transforms.Create
 import org.apache.beam.sdk.transforms.ParDo
-import org.apache.beam.sdk.values.TupleTag
 import org.apache.beam.sdk.values.TupleTagList
 import org.apache.commons.io.FileUtils
 import org.junit.Rule

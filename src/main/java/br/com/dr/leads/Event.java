@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import lombok.Value;
 
-@Value
+@Value(staticConstructor = "create")
 public class Event implements Serializable {
 
   private String timestamp;
@@ -24,11 +24,11 @@ public class Event implements Serializable {
     EventType eventType = EventType.valueOf(getType());
 
     if (EventType.CREATE == eventType) {
-      return !StringUtils.isAnyBlank(data.getName(), data.getRole());
+      return !StringUtils.isAnyBlank(data.getName(), data.getJobTitle());
     }
 
     if (EventType.UPDATE == eventType) {
-      return Objects.nonNull(data.getId()) && !StringUtils.isAnyBlank(data.getName(), data.getRole());
+      return Objects.nonNull(data.getId()) && !StringUtils.isAnyBlank(data.getName(), data.getJobTitle());
     }
 
     if (EventType.DELETE == eventType) {

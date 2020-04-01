@@ -13,8 +13,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.beam.sdk.coders.StringUtf8Coder;
 import org.apache.beam.sdk.testing.TestPipeline;
-import org.apache.beam.sdk.transforms.Create;
+import org.apache.beam.sdk.testing.TestStream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -28,9 +29,14 @@ public class LeadsPipelineTest {
 
   private static final int EXPECTED_SHARDS = 2;
 
-  private List<String> expectedError = readFileToStream(Paths.get("src/test/resources/leads-error.txt")).collect(Collectors.toList());
-  private List<String> expectedSuccess = readFileToStream(Paths.get("src/test/resources/leads-success.txt")).collect(Collectors.toList());
-  private List<String> expectedAllData = new ArrayList<>(CollectionUtils.union(expectedError, expectedSuccess));
+  private List<String> inputError = readFileToStream(Paths.get("src/test/resources/leads-error.txt")).collect(Collectors.toList());
+  private List<String> inputSuccess = readFileToStream(Paths.get("src/test/resources/leads-success.txt")).collect(Collectors.toList());
+  private List<String> expectedSuccess = readFileToStream(Paths.get("src/test/resources/leads-success-with-average-salary.txt"))
+      .collect(Collectors.toList());
+  private List<String> inputAllData = new ArrayList<>(CollectionUtils.union(inputError, inputSuccess));
+  private TestStream<String> testInputStream = TestStream.create(StringUtf8Coder.of())
+      .addElements(inputAllData.get(0), inputAllData.subList(1, inputAllData.size()).toArray(new String[]{}))
+      .advanceWatermarkToInfinity();
 
   @Rule
   public final transient TestPipeline testPipeline = TestPipeline.fromOptions(createOptions());
@@ -43,19 +49,21 @@ public class LeadsPipelineTest {
   @Test
   public void shouldProduceAFileWithInvalidDataAndAFileWithValidData() throws Exception {
     testPipeline
-        .apply(Create.of(expectedAllData))
-        .apply(new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput()));
+        .apply(testInputStream)
+        .apply(new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput(),
+            getOptions().getJobTitlesCsvPath()));
 
     testPipeline.run().waitUntilFinish();
-    assertData(getOptions().getOutput() + "/error/", expectedError);
+    assertData(getOptions().getOutput() + "/error/", inputError);
     assertData(getOptions().getOutput() + "/success/", expectedSuccess);
   }
 
   @Test
   public void shouldProduce2Shards() throws Exception {
     testPipeline
-        .apply(Create.of(expectedAllData))
-        .apply(new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput()));
+        .apply(testInputStream)
+        .apply(new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput(),
+            getOptions().getJobTitlesCsvPath()));
 
     testPipeline.run().waitUntilFinish();
 
@@ -67,6 +75,7 @@ public class LeadsPipelineTest {
     LeadsPipelineOptions pipelineOptions = TestPipeline.testingPipelineOptions().as(LeadsPipelineOptions.class);
     pipelineOptions.setOutput("/tmp/" + UUID.randomUUID().toString());
     pipelineOptions.setShardsNum(EXPECTED_SHARDS);
+    pipelineOptions.setJobTitlesCsvPath("src/test/resources/job-titles.csv");
     return pipelineOptions;
   }
 
