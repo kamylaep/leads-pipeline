@@ -1,5 +1,6 @@
 package br.com.dr.leads.pipeline;
 
+import static br.com.dr.leads.pipeline.LeadsPipeline.CSV_TAG;
 import static br.com.dr.leads.test.FileHelper.getNumberOfShardsProduced;
 import static br.com.dr.leads.test.FileHelper.readFileToStream;
 import static br.com.dr.leads.test.FileHelper.readOutput;
@@ -16,6 +17,9 @@ import java.util.stream.Collectors;
 import org.apache.beam.sdk.coders.StringUtf8Coder;
 import org.apache.beam.sdk.testing.TestPipeline;
 import org.apache.beam.sdk.testing.TestStream;
+import org.apache.beam.sdk.values.PCollection;
+import org.apache.beam.sdk.values.PCollectionTuple;
+import org.apache.beam.sdk.values.Row;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -23,6 +27,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
+import br.com.dr.leads.pipeline.LeadsPipeline.ProcessCsv;
 import br.com.dr.leads.pipeline.LeadsPipeline.ProcessEvent;
 
 public class LeadsPipelineTest {
@@ -48,10 +53,12 @@ public class LeadsPipelineTest {
 
   @Test
   public void shouldProduceAFileWithInvalidDataAndAFileWithValidData() throws Exception {
-    testPipeline
-        .apply(testInputStream)
-        .apply(new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput(),
-            getOptions().getJobTitlesCsvPath()));
+    PCollection<String> pubSubData = testPipeline.apply(testInputStream);
+    PCollection<Row> csvData = testPipeline.apply("ProcessJobTitlesCsv", new ProcessCsv(getOptions().getJobTitlesCsvPath()));
+
+    PCollectionTuple.of(LeadsPipeline.EVENT_TAG, pubSubData)
+        .and(CSV_TAG, csvData)
+        .apply("ProcessEvent", new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput()));
 
     testPipeline.run().waitUntilFinish();
     assertData(getOptions().getOutput() + "/error/", inputError);
@@ -60,10 +67,12 @@ public class LeadsPipelineTest {
 
   @Test
   public void shouldProduce2Shards() throws Exception {
-    testPipeline
-        .apply(testInputStream)
-        .apply(new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput(),
-            getOptions().getJobTitlesCsvPath()));
+    PCollection<String> pubSubData = testPipeline.apply(testInputStream);
+    PCollection<Row> csvData = testPipeline.apply("ProcessJobTitlesCsv", new ProcessCsv(getOptions().getJobTitlesCsvPath()));
+
+    PCollectionTuple.of(LeadsPipeline.EVENT_TAG, pubSubData)
+        .and(CSV_TAG, csvData)
+        .apply("ProcessEvent", new ProcessEvent(getOptions().getWindowInSeconds(), getOptions().getShardsNum(), getOptions().getOutput()));
 
     testPipeline.run().waitUntilFinish();
 

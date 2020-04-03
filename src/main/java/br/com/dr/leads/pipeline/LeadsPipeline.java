@@ -16,6 +16,7 @@ import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.transforms.windowing.FixedWindows;
 import org.apache.beam.sdk.transforms.windowing.GlobalWindows;
 import org.apache.beam.sdk.transforms.windowing.Window;
+import org.apache.beam.sdk.values.PBegin;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.PCollectionTuple;
 import org.apache.beam.sdk.values.PDone;
@@ -39,6 +40,10 @@ public class LeadsPipeline {
   };
   public static final TupleTag<String> ERROR_TAG = new TupleTag<String>() {
   };
+  public static final TupleTag<String> EVENT_TAG = new TupleTag<String>() {
+  };
+  public static final TupleTag<Row> CSV_TAG = new TupleTag<Row>() {
+  };
 
   public static final Schema EVENT_SCHEMA = Schema.builder()
       .addStringField("eventTimestamp")
@@ -59,39 +64,52 @@ public class LeadsPipeline {
 
     Pipeline pipeline = Pipeline.create(options);
 
-    pipeline
-        .apply("ReadData", PubsubIO.readStrings().fromSubscription(options.getSubscription()))
-        .apply("ProcessEvent",
-            new ProcessEvent(options.getWindowInSeconds(), options.getShardsNum(), options.getOutput(), options.getJobTitlesCsvPath()));
+    PCollection<String> pubSubData = pipeline
+        .apply("ReadPubSub", PubsubIO.readStrings().fromSubscription(options.getSubscription()));
+
+    PCollection<Row> csvData = pipeline
+        .apply("ProcessJobTitlesCsv", new ProcessCsv(options.getJobTitlesCsvPath()));
+
+    PCollectionTuple.of(EVENT_TAG, pubSubData)
+        .and(CSV_TAG, csvData)
+        .apply("ProcessEvent", new ProcessEvent(options.getWindowInSeconds(), options.getShardsNum(), options.getOutput()));
 
     pipeline.run();
   }
 
   @AllArgsConstructor
-  public static class ProcessEvent extends PTransform<PCollection<String>, PDone> {
+  public static class ProcessCsv extends PTransform<PBegin, PCollection<Row>> {
 
-    private long windowInSeconds;
-    private int shardsNum;
-    private String outputPath;
-    private String csvPath;
+    private String jobTitlesCsvPath;
 
     @Override
-    public PDone expand(PCollection<String> eventsFromPubSub) {
-      PCollectionTuple validEvents = eventsFromPubSub
-          .apply("Window", Window.into(FixedWindows.of(Duration.standardSeconds(windowInSeconds))))
-          .apply("ValidateEvent", ParDo.of(new ValidateEventFn())
-              .withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)));
-
-      PCollection<Row> jobTitlesRows = eventsFromPubSub.getPipeline()
-          .apply("ReadJobsTitlesCsv", TextIO.read().from(csvPath))
-          .apply("CsvWindow", Window.into(new GlobalWindows()))
-          .apply("JobTitlesCsvRow", MapElements.into(TypeDescriptors.rows())
+    public PCollection<Row> expand(PBegin pBegin) {
+      return pBegin.apply("ReadJobsTitlesCsv", TextIO.read().from(jobTitlesCsvPath))
+          .apply("JobTitlesToRow", MapElements.into(TypeDescriptors.rows())
               .via(c -> {
                 String[] csvRow = c.split(",");
                 return Row.withSchema(JOB_TITLES_SCHEMA)
                     .addValues(csvRow[0], Double.parseDouble(csvRow[1]))
                     .build();
               })).setRowSchema(JOB_TITLES_SCHEMA);
+    }
+  }
+
+  @AllArgsConstructor
+  public static class ProcessEvent extends PTransform<PCollectionTuple, PDone> {
+
+    private long windowInSeconds;
+    private int shardsNum;
+    private String outputPath;
+
+    @Override
+    public PDone expand(PCollectionTuple pCollectionTuple) {
+
+      PCollectionTuple validEvents = pCollectionTuple
+          .get(EVENT_TAG)
+          .apply("Window", Window.into(FixedWindows.of(Duration.standardSeconds(windowInSeconds))))
+          .apply("ValidateEvent", ParDo.of(new ValidateEventFn())
+              .withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)));
 
       PCollection<Row> eventsRows = validEvents
           .get(SUCCESS_TAG)
@@ -100,7 +118,10 @@ public class LeadsPipeline {
                   .addValues(c.getTimestamp(), c.getType(), c.getData().getId(), c.getData().getName(), c.getData().getJobTitle())
                   .build())).setRowSchema(EVENT_SCHEMA);
 
-      PCollectionTuple.of("Events", eventsRows).and("JobTitles", jobTitlesRows)
+      PCollection<Row> csvRows = pCollectionTuple.get(CSV_TAG)
+          .apply("CsvWindow", Window.into(new GlobalWindows()));
+
+      PCollectionTuple.of("Events", eventsRows).and("JobTitles", csvRows)
           .apply("JoinEventsAndJobs",
               SqlTransform.query(
                   "SELECT Events.eventTimestamp, Events.type, Events.id, Events.name, Events.jobTitle, JobTitles.averageSalary"
@@ -127,7 +148,7 @@ public class LeadsPipeline {
                   .via(Contextful.fn(event -> event), TextIO.sink())
                   .to(outputPath + "/error/"));
 
-      return PDone.in(eventsFromPubSub.getPipeline());
+      return PDone.in(pCollectionTuple.getPipeline());
     }
   }
 
