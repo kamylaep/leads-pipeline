@@ -1,8 +1,6 @@
 package br.com.dr.leads.pipeline
 
 
-import br.com.dr.leads.pipeline.LeadsPipeline
-import br.com.dr.leads.pipeline.LeadsPipelineOptions
 import org.apache.beam.sdk.testing.PAssert
 import org.apache.beam.sdk.testing.TestPipeline
 import org.apache.beam.sdk.transforms.Create
@@ -16,7 +14,7 @@ import spock.lang.Unroll
 import static br.com.dr.leads.pipeline.LeadsPipeline.ERROR_TAG
 import static br.com.dr.leads.pipeline.LeadsPipeline.SUCCESS_TAG
 
-class ValidateEventSpecTest extends Specification implements Serializable {
+class ValidateEventFnSpecTest extends Specification implements Serializable {
 
   @Rule
   public final transient TestPipeline testPipeline = TestPipeline.fromOptions(createOptions())
@@ -30,7 +28,7 @@ class ValidateEventSpecTest extends Specification implements Serializable {
     setup:
     def output = testPipeline
         .apply(Create.of(event))
-        .apply(ParDo.of(new LeadsPipeline.ValidateEvent())
+        .apply(ParDo.of(new LeadsPipeline.ValidateEventFn())
             .withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)))
 
     expect:

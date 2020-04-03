@@ -79,7 +79,7 @@ public class LeadsPipeline {
     public PDone expand(PCollection<String> eventsFromPubSub) {
       PCollectionTuple validEvents = eventsFromPubSub
           .apply("Window", Window.into(FixedWindows.of(Duration.standardSeconds(windowInSeconds))))
-          .apply("ValidateEvent", ParDo.of(new ValidateEvent())
+          .apply("ValidateEvent", ParDo.of(new ValidateEventFn())
               .withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)));
 
       PCollection<Row> jobTitlesRows = eventsFromPubSub.getPipeline()
@@ -131,7 +131,7 @@ public class LeadsPipeline {
     }
   }
 
-  public static class ValidateEvent extends DoFn<String, Event> {
+  public static class ValidateEventFn extends DoFn<String, Event> {
 
     @ProcessElement
     public void processElement(ProcessContext context) {
