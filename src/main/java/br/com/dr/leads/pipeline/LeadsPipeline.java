@@ -23,7 +23,6 @@ import org.apache.beam.sdk.values.PDone;
 import org.apache.beam.sdk.values.Row;
 import org.apache.beam.sdk.values.TupleTag;
 import org.apache.beam.sdk.values.TupleTagList;
-import org.apache.beam.sdk.values.TypeDescriptor;
 import org.apache.beam.sdk.values.TypeDescriptors;
 import org.joda.time.Duration;
 
@@ -126,10 +125,7 @@ public class LeadsPipeline {
               SqlTransform.query(
                   "SELECT Events.eventTimestamp, Events.type, Events.id, Events.name, Events.jobTitle, JobTitles.averageSalary"
                       + " FROM Events LEFT OUTER JOIN JobTitles ON Events.jobTitle = JobTitles.description"))
-          .apply("RowToEvent",
-              MapElements.into(TypeDescriptor.of(Event.class)).via(row ->
-                  Event.create(row.getString("eventTimestamp"), row.getString("type"),
-                      EventData.create(row.getInt64("id"), row.getString("name"), row.getString("jobTitle"), row.getDouble("averageSalary")))))
+          .apply("RowToEvent", ParDo.of(new RowEventFn()))
           .apply("EventsToJson",
               MapElements.into(TypeDescriptors.strings()).via(e -> new Gson().toJson(e)))
           .apply("WriteSuccess",
@@ -169,6 +165,18 @@ public class LeadsPipeline {
       } catch (Exception e) {
         context.output(ERROR_TAG, json);
       }
+    }
+  }
+
+  public static class RowEventFn extends DoFn<Row, Event> {
+
+    @ProcessElement
+    public void processElement(ProcessContext context) {
+      Row row = context.element();
+      EventData eventData =
+          EventData.create(row.getInt64("id"), row.getString("name"), row.getString("jobTitle"), row.getDouble("averageSalary"));
+      Event event = Event.create(row.getString("eventTimestamp"), row.getString("type"), eventData);
+      context.output(event);
     }
   }
 }
