@@ -40,7 +40,7 @@ class LeadsPipelineSpecTest extends Specification {
   def 'should produce a file with invalid data and a file with valid data'() {
     given: 'a pipeline with valid and invalid data'
     def pubSubData = testPipeline.apply(testInputStream);
-    def csvData = testPipeline.apply(new LeadsPipeline.ReadCsv(testPipeline.getOptions().getJobTitlesCsvPath()));
+    def csvData = testPipeline.apply(new LeadsPipeline.ReadAndParseCSVToRow(testPipeline.getOptions().getJobTitlesCsvPath()));
 
     PCollectionTuple.of(EVENT_TAG, pubSubData)
         .and(CSV_TAG, csvData)
@@ -64,7 +64,7 @@ class LeadsPipelineSpecTest extends Specification {
   def 'should produce two shards for each type of file'() {
     given: 'a pipeline with valid and invalid data'
     def pubSubData = testPipeline.apply(testInputStream);
-    def csvData = testPipeline.apply(new LeadsPipeline.ReadCsv(testPipeline.getOptions().getJobTitlesCsvPath()));
+    def csvData = testPipeline.apply(new LeadsPipeline.ReadAndParseCSVToRow(testPipeline.getOptions().getJobTitlesCsvPath()));
 
     PCollectionTuple.of(EVENT_TAG, pubSubData)
         .and(CSV_TAG, csvData)

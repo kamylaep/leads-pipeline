@@ -27,7 +27,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
-import br.com.dr.leads.pipeline.LeadsPipeline.ReadCsv;
+import br.com.dr.leads.pipeline.LeadsPipeline.ReadAndParseCSVToRow;
 import br.com.dr.leads.pipeline.LeadsPipeline.ProcessEvent;
 
 public class LeadsPipelineTest {
@@ -54,7 +54,7 @@ public class LeadsPipelineTest {
   @Test
   public void shouldProduceAFileWithInvalidDataAndAFileWithValidData() throws Exception {
     PCollection<String> pubSubData = testPipeline.apply(testInputStream);
-    PCollection<Row> csvData = testPipeline.apply("ProcessJobTitlesCsv", new ReadCsv(getOptions().getJobTitlesCsvPath()));
+    PCollection<Row> csvData = testPipeline.apply("ProcessJobTitlesCsv", new ReadAndParseCSVToRow(getOptions().getJobTitlesCsvPath()));
 
     PCollectionTuple.of(LeadsPipeline.EVENT_TAG, pubSubData)
         .and(CSV_TAG, csvData)
@@ -68,7 +68,7 @@ public class LeadsPipelineTest {
   @Test
   public void shouldProduce2Shards() throws Exception {
     PCollection<String> pubSubData = testPipeline.apply(testInputStream);
-    PCollection<Row> csvData = testPipeline.apply("ProcessJobTitlesCsv", new ReadCsv(getOptions().getJobTitlesCsvPath()));
+    PCollection<Row> csvData = testPipeline.apply("ProcessJobTitlesCsv", new ReadAndParseCSVToRow(getOptions().getJobTitlesCsvPath()));
 
     PCollectionTuple.of(LeadsPipeline.EVENT_TAG, pubSubData)
         .and(CSV_TAG, csvData)
