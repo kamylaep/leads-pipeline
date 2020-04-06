@@ -82,8 +82,8 @@ public class LeadsPipeline {
     private String jobTitlesCsvPath;
 
     @Override
-    public PCollection<Row> expand(PBegin pBegin) {
-      return pBegin.apply("ReadJobsTitlesCsv", TextIO.read().from(jobTitlesCsvPath))
+    public PCollection<Row> expand(PBegin pipeline) {
+      return pipeline.apply("ReadJobsTitlesCsv", TextIO.read().from(jobTitlesCsvPath))
           .apply("JobTitlesToRow", MapElements.into(TypeDescriptors.rows())
               .via(c -> {
                 String[] csvRow = c.split(",");
@@ -102,9 +102,9 @@ public class LeadsPipeline {
     private String outputPath;
 
     @Override
-    public PDone expand(PCollectionTuple pCollectionTuple) {
+    public PDone expand(PCollectionTuple leadsAndJobTitlesTuple) {
 
-      PCollectionTuple validEvents = pCollectionTuple
+      PCollectionTuple validEvents = leadsAndJobTitlesTuple
           .get(EVENT_TAG)
           .apply("Window", Window.into(FixedWindows.of(Duration.standardSeconds(windowInSeconds))))
           .apply("ValidateEvent", ParDo.of(new ValidateEventFn())
@@ -117,7 +117,7 @@ public class LeadsPipeline {
                   .addValues(c.getTimestamp(), c.getType(), c.getData().getId(), c.getData().getName(), c.getData().getJobTitle())
                   .build())).setRowSchema(EVENT_SCHEMA);
 
-      PCollection<Row> csvRows = pCollectionTuple.get(CSV_TAG)
+      PCollection<Row> csvRows = leadsAndJobTitlesTuple.get(CSV_TAG)
           .apply("CsvWindow", Window.into(new GlobalWindows()));
 
       PCollectionTuple.of("Events", eventsRows).and("JobTitles", csvRows)
@@ -144,7 +144,7 @@ public class LeadsPipeline {
                   .via(Contextful.fn(event -> event), TextIO.sink())
                   .to(outputPath + "/error/"));
 
-      return PDone.in(pCollectionTuple.getPipeline());
+      return PDone.in(leadsAndJobTitlesTuple.getPipeline());
     }
   }
 
