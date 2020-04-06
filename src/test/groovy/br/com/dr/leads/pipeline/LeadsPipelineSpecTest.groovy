@@ -3,9 +3,7 @@ package br.com.dr.leads.pipeline
 import static br.com.dr.leads.pipeline.LeadsPipeline.CSV_TAG
 import static br.com.dr.leads.pipeline.LeadsPipeline.EVENT_TAG
 
-import org.apache.beam.sdk.values.PCollection
 import org.apache.beam.sdk.values.PCollectionTuple
-import org.apache.beam.sdk.values.Row
 
 import groovy.io.FileType
 import org.apache.beam.sdk.coders.StringUtf8Coder
@@ -42,7 +40,7 @@ class LeadsPipelineSpecTest extends Specification {
   def 'should produce a file with invalid data and a file with valid data'() {
     given: 'a pipeline with valid and invalid data'
     def pubSubData = testPipeline.apply(testInputStream);
-    def csvData = testPipeline.apply(new LeadsPipeline.ProcessCsv(testPipeline.getOptions().getJobTitlesCsvPath()));
+    def csvData = testPipeline.apply(new LeadsPipeline.ReadCsv(testPipeline.getOptions().getJobTitlesCsvPath()));
 
     PCollectionTuple.of(EVENT_TAG, pubSubData)
         .and(CSV_TAG, csvData)
@@ -66,7 +64,7 @@ class LeadsPipelineSpecTest extends Specification {
   def 'should produce two shards for each type of file'() {
     given: 'a pipeline with valid and invalid data'
     def pubSubData = testPipeline.apply(testInputStream);
-    def csvData = testPipeline.apply(new LeadsPipeline.ProcessCsv(testPipeline.getOptions().getJobTitlesCsvPath()));
+    def csvData = testPipeline.apply(new LeadsPipeline.ReadCsv(testPipeline.getOptions().getJobTitlesCsvPath()));
 
     PCollectionTuple.of(EVENT_TAG, pubSubData)
         .and(CSV_TAG, csvData)

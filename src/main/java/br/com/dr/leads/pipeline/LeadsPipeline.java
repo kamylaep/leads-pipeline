@@ -68,7 +68,7 @@ public class LeadsPipeline {
         .apply("ReadPubSub", PubsubIO.readStrings().fromSubscription(options.getSubscription()));
 
     PCollection<Row> csvData = pipeline
-        .apply("ProcessJobTitlesCsv", new ProcessCsv(options.getJobTitlesCsvPath()));
+        .apply("ProcessJobTitlesCsv", new ReadCsv(options.getJobTitlesCsvPath()));
 
     PCollectionTuple.of(EVENT_TAG, pubSubData)
         .and(CSV_TAG, csvData)
@@ -78,7 +78,7 @@ public class LeadsPipeline {
   }
 
   @AllArgsConstructor
-  public static class ProcessCsv extends PTransform<PBegin, PCollection<Row>> {
+  public static class ReadCsv extends PTransform<PBegin, PCollection<Row>> {
 
     private String jobTitlesCsvPath;
 
