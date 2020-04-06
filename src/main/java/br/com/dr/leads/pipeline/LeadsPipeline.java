@@ -82,8 +82,8 @@ public class LeadsPipeline {
     private String jobTitlesCsvPath;
 
     @Override
-    public PCollection<Row> expand(PBegin pipeline) {
-      return pipeline.apply("ReadJobsTitlesCsv", TextIO.read().from(jobTitlesCsvPath))
+    public PCollection<Row> expand(PBegin input) {
+      return input.apply("ReadJobsTitlesCsv", TextIO.read().from(jobTitlesCsvPath))
           .apply("JobTitlesToRow", MapElements.into(TypeDescriptors.rows())
               .via(c -> {
                 String[] csvRow = c.split(",");
