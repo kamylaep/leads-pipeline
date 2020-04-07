@@ -104,68 +104,76 @@ def job_name
   names[rand(names.size)]
 end
 
-# publish creates
-(0..100).map do |i|
-  name = first_name + ' ' + last_name
-  job = job_name
-  topic.publish(create_example(name, job).to_json)
+loop do
+  puts 'publishing'
+  # publish creates
+  (0..100).map do |i|
+    name = first_name + ' ' + last_name
+    job = job_name
+    topic.publish(create_example(name, job).to_json)
+    topic.publish(create_example(name, 'Cargo sem salário médio').to_json)
+  end
+
+  # publish creates with invalid json
+  (0..10).map do |i|
+    name = first_name + ' ' + last_name
+    job = job_name
+    topic.publish(create_example_without_type(name, job).to_json)
+    topic.publish(create_example_invalid_type(name, job).to_json)
+    topic.publish(create_example_without_timestamp(name, job).to_json)
+    topic.publish(create_example_without_data(name, job).to_json)
+    topic.publish(create_example_without_nome(name, job).to_json)
+    topic.publish(create_example_without_cargo(name, job).to_json)
+  end
+
+  created_ids = []
+  # publish updates
+  (0..20).map do |i|
+    id = rand(2_000_000)
+    created_ids << id
+    name = first_name + ' ' + last_name
+    job = job_name
+    topic.publish(update_example(id, name, job).to_json)
+    topic.publish(update_example(id, name, 'Cargo sem salário médio').to_json)
+  end
+
+  # publish updates with invalid json
+  (0..20).map do |i|
+    id = rand(2_000_000)
+    created_ids << id
+    name = first_name + ' ' + last_name
+    job = job_name
+    topic.publish(update_example_without_type(id, name, job).to_json)
+    topic.publish(update_example_invalid_type(id, name, job).to_json)
+    topic.publish(update_example_without_timestamp(id, name, job).to_json)
+    topic.publish(update_example_without_data(id, name, job).to_json)
+    topic.publish(update_example_without_id(id, name, job).to_json)
+    topic.publish(update_example_without_nome(id, name, job).to_json)
+    topic.publish(update_example_without_cargo(id, name, job).to_json)
+  end
+
+  # publish deletes
+  (0..10).map do |i|
+    id = created_ids[rand(created_ids.size)]
+    topic.publish(delete_example(id).to_json)
+  end
+
+
+  # publish deletes with invalid json
+  (0..10).map do |i|
+    id = created_ids[rand(created_ids.size)]
+    topic.publish(delete_example_without_type(id).to_json)
+    topic.publish(delete_example_invalid_type(id).to_json)
+    topic.publish(delete_example_without_timestamp(id).to_json)
+    topic.publish(delete_example_without_data(id).to_json)
+    topic.publish(delete_example_without_id(id).to_json)
+  end
+
+  # publish invalid data
+  topic.publish('<xml>I am not a Json</xml>')
+  topic.publish("[]")
+  topic.publish("Abcd 123456")
+
+  puts 'sleeping'
+  sleep 30
 end
-
-# publish creates with invalid json
-(0..10).map do |i|
-  name = first_name + ' ' + last_name
-  job = job_name
-  topic.publish(create_example_without_type(name, job).to_json)
-  topic.publish(create_example_invalid_type(name, job).to_json)
-  topic.publish(create_example_without_timestamp(name, job).to_json)
-  topic.publish(create_example_without_data(name, job).to_json)
-  topic.publish(create_example_without_nome(name, job).to_json)
-  topic.publish(create_example_without_cargo(name, job).to_json)
-end
-
-created_ids = []
-# publish updates
-(0..20).map do |i|
-  id = rand(2_000_000)
-  created_ids << id
-  name = first_name + ' ' + last_name
-  job = job_name
-  topic.publish(update_example(id, name, job).to_json)
-end
-
-# publish updates with invalid json
-(0..20).map do |i|
-  id = rand(2_000_000)
-  created_ids << id
-  name = first_name + ' ' + last_name
-  job = job_name
-  topic.publish(update_example_without_type(id, name, job).to_json)
-  topic.publish(update_example_invalid_type(id, name, job).to_json)
-  topic.publish(update_example_without_timestamp(id, name, job).to_json)
-  topic.publish(update_example_without_data(id, name, job).to_json)
-  topic.publish(update_example_without_id(id, name, job).to_json)
-  topic.publish(update_example_without_nome(id, name, job).to_json)
-  topic.publish(update_example_without_cargo(id, name, job).to_json)
-end
-
-# publish deletes
-(0..10).map do |i|
-  id = created_ids[rand(created_ids.size)]
-  topic.publish(delete_example(id).to_json)
-end
-
-
-# publish deletes with invalid json
-(0..10).map do |i|
-  id = created_ids[rand(created_ids.size)]
-  topic.publish(delete_example_without_type(id).to_json)
-  topic.publish(delete_example_invalid_type(id).to_json)
-  topic.publish(delete_example_without_timestamp(id).to_json)
-  topic.publish(delete_example_without_data(id).to_json)
-  topic.publish(delete_example_without_id(id).to_json)
-end
-
-# publish invalid data
-topic.publish('<xml>I am not a Json</xml>')
-topic.publish("[]")
-topic.publish("Abcd 123456")

@@ -12,6 +12,7 @@ mvn compile exec:java -Dexec.mainClass=br.com.dr.leads.pipeline.LeadsPipeline -D
 --streaming=true \
 --project=<PROJETCT-ID> \
 --subscription=<SUBSCRIPTION> \
+--jobTitlesCsvPath=<JOB-TITLES-CSV-PATH> \
 --outputRootPath=<OUTPUT-PATH> \
 -Pdataflow-runner
 ```

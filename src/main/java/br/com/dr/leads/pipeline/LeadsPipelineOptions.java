@@ -23,4 +23,7 @@ public interface LeadsPipelineOptions extends GcpOptions {
 
   void setShardsNum(int shardsNum);
 
+  String getJobTitlesCsvPath();
+
+  void setJobTitlesCsvPath(String jobTitlesCsvPath);
 }

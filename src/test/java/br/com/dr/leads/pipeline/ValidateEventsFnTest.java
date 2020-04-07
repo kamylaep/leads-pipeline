@@ -21,7 +21,9 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class ValidateEventsTest {
+import br.com.dr.leads.pipeline.LeadsPipeline.ValidateEventFn;
+
+public class ValidateEventsFnTest {
 
 
   private List<String> expectedError = readFileToStream(Paths.get("src/test/resources/leads-error.txt")).collect(Collectors.toList());
@@ -38,7 +40,7 @@ public class ValidateEventsTest {
   public void shouldProduceAFileWithInvalidDataAndAFileWithValidData() {
     PCollectionTuple output = testPipeline
         .apply(Create.of(expectedError))
-        .apply(ParDo.of(new LeadsPipeline.ValidateEvent()).withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)));
+        .apply(ParDo.of(new ValidateEventFn()).withOutputTags(SUCCESS_TAG, TupleTagList.of(ERROR_TAG)));
 
     PAssert.that(output.get(SUCCESS_TAG)).empty();
     PAssert.that(output.get(ERROR_TAG)).containsInAnyOrder(expectedError);

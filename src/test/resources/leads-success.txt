@@ -40,3 +40,5 @@
 {"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Felipe ROCHA","cargo":"Açougueiro cortador (exclusive comércio)"}}
 {"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":294702,"nome":"Miguel CABRAL","cargo":"Assessor de diretoria"}}
 {"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Eduardo LEVY","cargo":"Injetor de plástico"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"CREATE","data":{"nome":"Mônica LEVY","cargo":"Cargo sem salário médio"}}
+{"timestamp":"2020-03-28T19:20:51.638Z","type":"UPDATE","data":{"id":880567,"nome":"Heitor PINHEIRO","cargo":"Cargo sem salário médio"}}
